@@ -1,0 +1,16 @@
+{
+	"person": {
+		"name": "John",
+		"age": 31,
+		"cite": "NYC"
+	}
+}
+
+
+<
+	"person": <
+		"name": "John",
+		"age": 31,
+		"cite": "NYC"
+	}
+}
