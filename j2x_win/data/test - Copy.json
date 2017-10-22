@@ -1,0 +1,18 @@
+{
+	"book": [
+		{
+			"person": {
+				"name": "John",
+				"age": 31,
+				"city": "NYC"
+			}
+		},
+		{
+			"person": {
+				"name": "Ben",
+				"age": 31,
+				"city": "YA"
+			}
+		}
+	]
+}
