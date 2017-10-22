@@ -2,53 +2,125 @@
 
 #include "J2XTransformer.h"
 
-#include <algorithm>
 #include <ctype.h>
+#include <algorithm>
 
-const char* J2XTransformer::transform(const char* json)
+int isInvalid(char c)
 {
-  size_t len = strlen(json);
+  return isspace(c) || c == '[' || c == ']' || c == '{' || c == '}';
+}
 
-  m_xml.clear();
-  m_xml.reserve(len);
+const char* J2XTransformer::transform(const char* pJson)
+{
+  std::string json(pJson);
 
-  int tagStartIndex = -1;
+  json.erase(std::remove_if(json.begin(), json.end(), isInvalid), json.end());
+  size_t len = json.length();
+
   for (int i = 0; i < len; ++i)
   {
     const char& c = json[i];
 
-    if (isspace(c) || c == '\"') // skip whitespaces and " symbol
+    if (c == '{')
     {
-      continue;
+      i = createXmlNode(json.c_str(), i, len);
     }
-    else if (c == '{') // tag start
+    else if (c == ':')
     {
-      tagStartIndex = i + 2;
+      i = createXmlValue(json.c_str(), i, len);
     }
-    else if (c == ':') // tag value start
+    else if (c == ',')
     {
-      std::string xmlTag(&json[tagStartIndex], &json[i - 1]);
-      xmlTag.erase(remove_if(xmlTag.begin(), xmlTag.end(), isspace), xmlTag.end());
-      m_xmlTags.push(xmlTag);
-      tagStartIndex = -1;
-
-      m_xml.append("<").append(xmlTag.c_str()).append(">");
+      closeXmlValue();
+      i = createXmlNode(json.c_str(), i, len);
     }
-    else if (c == ',' || c == '}') // close tag
+    else if (c == '}')
     {
-      tagStartIndex = i + 1;
-      const std::string& xmlTag= m_xmlTags.top();
-
-      m_xml.append("</").append(xmlTag.c_str()).append(">");
-
-      m_xmlTags.pop();
-    }
-    else if (tagStartIndex == -1) // tag value
-    {
-      m_xml.append(1, c);
+      closeXmlValue();
     }
   }
 
-
   return m_xml.c_str();
+}
+
+int J2XTransformer::createXmlNode(const char* json, int index, size_t len)
+{
+  int i = index;
+  int startIndex = -1;
+  // find start of xml node
+  for (; i < len; ++i)
+  {
+    const char& c = json[i];
+    if (c == '"')
+    {
+      startIndex = ++i;
+      break;
+    }
+  }
+
+  //find end of xml node
+  for (; i < len; ++i)
+  {
+    const char& c = json[i];
+    if (c == '"')
+    {
+      break;
+    }
+  }
+
+  std::string xmlTag(&json[startIndex], &json[i]);
+  m_xmlTags.push(xmlTag);
+  m_xml.append("<").append(xmlTag.c_str()).append(">");
+
+  return i;
+}
+
+int J2XTransformer::createXmlValue(const char * json, int index, size_t len)
+{
+  int i = index;
+  int startIndex = -1;
+  // find start of xml node
+  for (; i < len; ++i)
+  {
+    const char& c = json[i];
+    if (c == '{' || c == '[') //start of next node
+    {
+      return --i;
+    }
+    else  if (!isspace(c) && c != '"' && c != ':')
+    {
+      startIndex = i;
+      break;
+    }
+  }
+
+  //find end of xml node
+  for (; i < len; ++i)
+  {
+    const char& c = json[i];
+    if (isspace(c) || c == '"' || c== ',' || c == '}')
+    {
+      break;
+    }
+  }
+
+  std::string xmlValue(&json[startIndex], &json[i]);
+  m_xml.append(xmlValue);
+
+  const char& c = json[i];
+  if (c == ',' || c == '}')
+  {
+    --i;
+  }
+
+  return i;
+}
+
+void J2XTransformer::closeXmlValue()
+{
+  const std::string& xmlTag = m_xmlTags.top();
+
+  m_xml.append("</").append(xmlTag.c_str()).append(">");
+
+  m_xmlTags.pop();
 }
