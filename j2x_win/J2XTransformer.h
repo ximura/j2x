@@ -10,10 +10,10 @@ public:
   virtual const char* transform(const char* json);
 
 private:
-  int createXmlNode(const char* json, int index, size_t len);
-  int createXmlValue(const char* json, int index, size_t len);
+  void createXmlNode(const char* json, int index, int endIndex);
+  void createXmlValue(const char* json, int index, int endIndex);
 
-  void closeXmlValue();
+  void closeXmlNode();
 
 private:
   std::string m_xml;
