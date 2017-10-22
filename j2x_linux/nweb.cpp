@@ -10,6 +10,10 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#ifndef SIGCLD
+#define SIGCLD SIGCHLD
+#endif
+
 #include "TransformerManager.h"
 
 #define VERSION 23
@@ -32,7 +36,7 @@ struct {
 	{"gz",  "image/gz"  },  
 	{"tar", "image/tar" },  
 	{"htm", "text/html" },  
-	{"html","text/html" },  
+	{"html","text/html" },
   { "json", "text/json" },
   { "", "text/text" },
 	{0,0} };
