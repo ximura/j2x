@@ -9,4 +9,8 @@ j2x.so: $(OBJ_FILES)
 	$(CXX) $(LDFLAGS) -o $@ $^
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	mkdir -p $(OBJ_DIR)
 	$(CXX) $(CXXFLAGS) -o $@ $<
+
+clean:
+	rm -f $(OBJ_FILES) *.so
