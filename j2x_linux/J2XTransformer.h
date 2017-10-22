@@ -1,6 +1,7 @@
 #pragma once
 #include "ITransformer.h"
 
+#include <string>
 #include <stack>
 
 
@@ -10,8 +11,8 @@ public:
   virtual const char* transform(const char* json);
 
 private:
-  void createXmlNode(const char* json, int index, int endIndex);
-  void createXmlValue(const char* json, int index, int endIndex);
+  void createXmlNode(const char* json, size_t index, size_t endIndex);
+  void createXmlValue(const char* json, size_t index, size_t endIndex);
 
   void closeXmlNode();
 

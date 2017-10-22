@@ -1,5 +1,3 @@
-#include "stdafx.h"
-
 #include "J2XTransformer.h"
 
 #include <ctype.h>
@@ -22,9 +20,9 @@ const char* J2XTransformer::transform(const char* pJson)
   json.erase(std::remove_if(json.begin(), json.end(), isInvalid), json.end());
   size_t len = json.length();
 
-  int startIndex = 0;
+  size_t startIndex = 0;
 
-  for (int i = 0; i < len; ++i)
+  for (size_t i = 0; i < len; ++i)
   {
     const char& c = json[i];
 
@@ -39,7 +37,7 @@ const char* J2XTransformer::transform(const char* pJson)
       startIndex = i + 1;
       closeXmlNode();
     }
-    else if ( c == ',' && json[i-1] != '}')
+    else if (c == ',' && json[i - 1] != '}')
     {
       createXmlValue(json.c_str(), startIndex, i);
       closeXmlNode();
@@ -54,7 +52,7 @@ const char* J2XTransformer::transform(const char* pJson)
   return m_xml.c_str();
 }
 
-void J2XTransformer::createXmlNode(const char* json, int startIndex, int endIndex)
+void J2XTransformer::createXmlNode(const char* json, size_t startIndex, size_t endIndex)
 {
   std::string xmlTag(&json[startIndex], &json[endIndex]);
   xmlTag.erase(std::remove_if(xmlTag.begin(), xmlTag.end(), isInvalidXmlNodeName), xmlTag.end());
@@ -62,7 +60,7 @@ void J2XTransformer::createXmlNode(const char* json, int startIndex, int endInde
   m_xml.append("<").append(xmlTag.c_str()).append(">");
 }
 
-void J2XTransformer::createXmlValue(const char* json, int startIndex, int endIndex)
+void J2XTransformer::createXmlValue(const char* json, size_t startIndex, size_t endIndex)
 {
   std::string xmlValue(&json[startIndex], &json[endIndex]);
   m_xml.append(xmlValue);

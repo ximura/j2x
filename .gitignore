@@ -259,3 +259,5 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/alg_ver_0.2.cpp
+/j2x-win/data/test - Copy.json

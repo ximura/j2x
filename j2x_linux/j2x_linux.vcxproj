@@ -27,9 +27,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{b62aefa0-5edb-4aa5-a0dc-3abb578e1ddc}</ProjectGuid>
+    <ProjectGuid>{193109b6-165d-4575-ad80-9a74b1245757}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>j2x_alg</RootNamespace>
+    <RootNamespace>j2x_linux</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -61,17 +61,33 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
-    <ClCompile Include="J2XTransformer.cpp" />
-    <ClCompile Include="main.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="J2XTransformer.h" />
+    <ClInclude Include="EmptyTransformer.h" />
     <ClInclude Include="ITransformer.h" />
+    <ClInclude Include="J2XTransformer.h" />
+    <ClInclude Include="TransformerManager.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="EmptyTransformer.cpp" />
+    <ClCompile Include="J2XTransformer.cpp" />
+    <ClCompile Include="j2x.cpp" />
+    <ClCompile Include="nweb.cpp" />
+    <ClCompile Include="TransformerManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\index.html">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </None>
     <None Include="data\test.json">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\favicon.ico">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </Image>
+    <Image Include="data\nigel.jpg">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+    </Image>
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>

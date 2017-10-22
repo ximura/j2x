@@ -4,7 +4,7 @@
 
 #define BUFSIZE 8096
 
-int main()
+int __main()
 {
   FILE   *fp;
   long    nbytes;
@@ -20,13 +20,14 @@ int main()
 
   while ((nbytes = fread(buffer, 1, BUFSIZE, fp)) > 0)
   {
-    buffer[nbytes + 1] = '\0';
-    std::string result = transformer->transform(buffer);
+    buffer[nbytes] = '\0';
+    const char* result = transformer->transform(buffer);
 
-    fprintf(stdout, result.c_str());
+    printf(result);
   }
 
   fclose(fp);
   delete transformer;
   return 1;
 }
+
