@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-c -Wall
+CXXFLAGS=-c -Wall -std=c++98 -pedantic-errors
 SRC_DIR := .
 OBJ_DIR := obj
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
