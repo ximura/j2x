@@ -118,6 +118,11 @@ void J2XTransformer::createXmlValue(const char* json, size_t startIndex, size_t 
 
 void J2XTransformer::closeXmlNode()
 {
+  if (m_xmlTags.empty())
+  {
+    return;
+  }
+
   const std::string& xmlTag = m_xmlTags.top();
 
   m_xml.append("</").append(xmlTag.c_str()).append(">");
