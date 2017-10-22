@@ -7,7 +7,12 @@
 
 int isInvalid(char c)
 {
-  return isspace(c) || c == '[' || c == ']' || c == '{' || c == '"';
+  return c == '[' || c == ']' || c == '{';
+}
+
+int isInvalidXmlNodeName(char c)
+{
+  return isspace(c) || c == '"';
 }
 
 const char* J2XTransformer::transform(const char* pJson)
@@ -52,6 +57,7 @@ const char* J2XTransformer::transform(const char* pJson)
 void J2XTransformer::createXmlNode(const char* json, int startIndex, int endIndex)
 {
   std::string xmlTag(&json[startIndex], &json[endIndex]);
+  xmlTag.erase(std::remove_if(xmlTag.begin(), xmlTag.end(), isInvalidXmlNodeName), xmlTag.end());
   m_xmlTags.push(xmlTag);
   m_xml.append("<").append(xmlTag.c_str()).append(">");
 }
