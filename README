@@ -6,3 +6,7 @@ Clean:
 
 Run:
 ./j2x.so 8181 data/ & 
+
+Test:
+* curl 127.0.01:8181/test.json
+* curl 127.0.01:8181/test
