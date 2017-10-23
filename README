@@ -1,0 +1,8 @@
+Compile:
+* make
+
+Clean:
+* make clean
+
+Run:
+./j2x.so 8181 data/ & 
