@@ -16,6 +16,8 @@ int isInvalidXmlNodeName(char c)
 const char* J2XTransformer::transform(const char* pJson)
 {
   std::string json(pJson);
+  
+  m_xml.clear();
 
   json.erase(std::remove_if(json.begin(), json.end(), isInvalid), json.end());
   size_t len = json.length();
