@@ -37,8 +37,8 @@ struct {
 	{"tar", "image/tar" },  
 	{"htm", "text/html" },  
 	{"html","text/html" },
-  { "json", "text/json" },
-  { "", "text/text" },
+	{ "json", "text/json" },
+	{ "", "text/text" },
 	{0,0} };
 
 static TransformerManager transformerManager;
@@ -126,15 +126,18 @@ void web(int fd, int hit)
 
   	ITransformer* transformer = transformerManager.getTransformer(fstr);
 	/* send file in 8KB block - last block may be smaller */
+	std::string result;
 	while (	(ret = read(file_fd, buffer, BUFSIZE)) > 0 ) {
-    		const char* result = transformer->transform(buffer);
-		len = strlen(result);
-	    	(void)sprintf(buffer,"HTTP/1.1 200 OK\nServer: nweb/%d.0\nContent-Length: %ld\nConnection: close\nContent-Type: %s\n\n", VERSION, len, fstr); /* Header + a blank line */
-		logger(LOG,"Header",buffer,hit);
-	        (void)write(fd,buffer,strlen(buffer));
-
-		(void)write(fd, result, strlen(result));
+		result.append(transformer->transform(buffer));
 	}
+
+	len = result.len();
+	(void)sprintf(buffer,"HTTP/1.1 200 OK\nServer: nweb/%d.0\nContent-Length: %ld\nConnection: close\nContent-Type: %s\n\n", VERSION, len, fstr); /* Header + a blank line */
+	logger(LOG,"Header",buffer,hit);
+	(void)write(fd,buffer,strlen(buffer));
+
+	(void)write(fd, result, strlen(result));
+
 	sleep(1);	/* allow socket to drain before signalling the socket is closed */
 	close(fd);
 	exit(1);
