@@ -131,7 +131,7 @@ void web(int fd, int hit)
 		result.append(transformer->transform(buffer));
 	}
 
-	len = result.len();
+	len = result.length();
 	(void)sprintf(buffer,"HTTP/1.1 200 OK\nServer: nweb/%d.0\nContent-Length: %ld\nConnection: close\nContent-Type: %s\n\n", VERSION, len, fstr); /* Header + a blank line */
 	logger(LOG,"Header",buffer,hit);
 	(void)write(fd,buffer,strlen(buffer));
