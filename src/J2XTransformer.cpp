@@ -8,11 +8,6 @@ int isInvalid(char c)
   return c == '[' || c == '{';
 }
 
-int isInvalidXmlNodeName(char c)
-{
-  return isspace(c) || c == '"';
-}
-
 const char* J2XTransformer::transform(const char* pJson)
 {
   std::string json(pJson);
