@@ -121,17 +121,19 @@ void web(int fd, int hit)
 		logger(NOTFOUND, "failed to open file",&buffer[5],fd);
 	}
 	logger(LOG,"SEND",&buffer[5],hit);
-	len = (long)lseek(file_fd, (off_t)0, SEEK_END); /* lseek to the file end to find the length */
-	      (void)lseek(file_fd, (off_t)0, SEEK_SET); /* lseek back to the file start ready for reading */
-          (void)sprintf(buffer,"HTTP/1.1 200 OK\nServer: nweb/%d.0\nContent-Length: %ld\nConnection: close\nContent-Type: %s\n\n", VERSION, len, fstr); /* Header + a blank line */
 	logger(LOG,"Header",buffer,hit);
 	(void)write(fd,buffer,strlen(buffer));
 
-  ITransformer* transformer = transformerManager.getTransformer(fstr);
+  	ITransformer* transformer = transformerManager.getTransformer(fstr);
 	/* send file in 8KB block - last block may be smaller */
 	while (	(ret = read(file_fd, buffer, BUFSIZE)) > 0 ) {
-    const char* result = transformer->transform(buffer);
-    (void)write(fd, result,ret);
+    		const char* result = transformer->transform(buffer);
+		len = strlen(result);
+	    	(void)sprintf(buffer,"HTTP/1.1 200 OK\nServer: nweb/%d.0\nContent-Length: %ld\nConnection: close\nContent-Type: %s\n\n", VERSION, len, fstr); /* Header + a blank line */
+		logger(LOG,"Header",buffer,hit);
+	        (void)write(fd,buffer,strlen(buffer));
+
+		(void)write(fd, result, strlen(result));
 	}
 	sleep(1);	/* allow socket to drain before signalling the socket is closed */
 	close(fd);
