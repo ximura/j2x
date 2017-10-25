@@ -136,7 +136,7 @@ void web(int fd, int hit)
 	logger(LOG,"Header",buffer,hit);
 	(void)write(fd,buffer,strlen(buffer));
 
-	(void)write(fd, result, strlen(result));
+	(void)write(fd, result, len);
 
 	sleep(1);	/* allow socket to drain before signalling the socket is closed */
 	close(fd);
